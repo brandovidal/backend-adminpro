@@ -11,16 +11,14 @@ const app = express();
 // CORS
 app.use(cors());
 
+// Read and Parse Body
+app.use(express.json());
+
 // Database
 dbConnection();
 
 // Routes
-app.get("/", (_req, res) => {
-  res.json({
-    ok: true,
-    msg: "Server node",
-  });
-});
+app.use("/api/users", require("./routes/users"));
 
 app.listen(process.env.PORT, () => {
   console.log("Server node " + process.env.PORT);
