@@ -6,7 +6,7 @@ const { Router } = require("express");
 const { check } = require("express-validator");
 const { validateFields } = require("../middlewares/validateFields");
 
-const { getUsers, createUsers } = require("../controllers/users");
+const { getUsers, createUser, updateUser } = require("../controllers/users");
 
 const router = Router();
 
@@ -19,7 +19,16 @@ router.post(
     check("email", "El email es obligatoria").isEmail(),
     validateFields,
   ],
-  createUsers
+  createUser
+);
+router.put(
+  "/:id",
+  [
+    check("name", "El nombre es obligatoria").not().isEmpty(),
+    check("email", "El email es obligatoria").isEmail(),
+    check("role", "El rol es obligatoria").not().isEmpty(),
+  ],
+  updateUser
 );
 
 module.exports = router;
