@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/user");
 const { generateJWT } = require("../helpers/jwt");
 
-const getUsers = async (_req, res) => {
+const getUsers = async (req, res) => {
   const users = await User.find({}, "name email role google");
 
   res.json({
