@@ -23,7 +23,7 @@ const login = async (req, res = response) => {
     if (!validPassword) {
       return res.status(404).json({
         ok: false,
-        msg: "Contraseña o email no encontrada",
+        msg: "Contraseña o email incorrectos",
       });
     }
 
@@ -93,13 +93,31 @@ const googleSigIn = async (req = request, res = response) => {
 const renewToken = async (req = request, res = response) => {
   const { uid } = req;
 
-  // Generar token
-  const token = await generateJWT(uid);
+  try {
+    // Generar token
+    const token = await generateJWT(uid);
 
-  res.json({
-    ok: true,
-    token,
-  });
+    // Retornar usuario
+    const user = await User.findById(uid);
+
+    if (!token) {
+      return res.status(401).json({
+        ok: false,
+        msg: "Token no enviado",
+      });
+    }
+
+    res.json({
+      ok: true,
+      token,
+      user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      ok: false,
+      msg: "Hable con el administrador",
+    });
+  }
 };
 
 module.exports = {
