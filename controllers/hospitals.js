@@ -35,8 +35,8 @@ const updateHospital = async (req, res = response) => {
   const { uid } = req;
 
   try {
-    const hospital = await Hospital.findById(id);
-    if (!hospital) {
+    const hospitalDB = await Hospital.findById(id);
+    if (!hospitalDB) {
       return res.status(404).json({
         ok: false,
         msg: "Hospital no encontrado por id",
@@ -48,15 +48,13 @@ const updateHospital = async (req, res = response) => {
       user: uid,
     };
 
-    const updateHospital = await Hospital.findByIdAndUpdate(
-      id,
-      modifiedHospital,
-      { new: true }
-    );
+    const hospital = await Hospital.findByIdAndUpdate(id, modifiedHospital, {
+      new: true,
+    });
 
     res.json({
       ok: true,
-      updateHospital,
+      hospital,
     });
   } catch (error) {
     console.warn(err);
