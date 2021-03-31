@@ -5,7 +5,7 @@ const User = require("../models/user");
 const { generateJWT } = require("../helpers/jwt");
 
 const getUsers = async (req, res) => {
-  let { since = 0, size = 10 } = req.query;
+  let { since = 0, size = 1000 } = req.query;
   since = Number(since);
   size = Number(size);
   console.log("size ", since, size);
@@ -85,7 +85,7 @@ const updateUser = async (req, res = response) => {
       }
     }
 
-    if (userBD.google) {
+    if (userBD.google && userBD.email !== email) {
       return res.status(400).json({
         ok: false,
         msg: "Usuarios de google no pueden actualizar su email",

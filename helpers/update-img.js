@@ -10,6 +10,8 @@ const Hospital = require("../models/hospital");
 
 // Borrar imagen anterior
 const deleteImg = (path) => {
+  console.info("path ", path);
+  console.info("existsSync ", fs.existsSync(path));
   if (fs.existsSync(path)) {
     fs.unlinkSync(path);
   }
@@ -23,7 +25,9 @@ const updateImg = async (type, id, name) => {
         console.warn("No es un medico por id");
         return false;
       }
-      deleteImg(`./uploads/${type}/${doctor.img}`);
+      if (doctor.img) {
+        deleteImg(`./uploads/${type}/${doctor.img}`);
+      }
 
       doctor.img = name;
       await doctor.save();
@@ -35,7 +39,9 @@ const updateImg = async (type, id, name) => {
         console.warn("No es un hospital por id");
         return false;
       }
-      deleteImg(`./uploads/${type}/${hospital.img}`);
+      if (hospital.img) {
+        deleteImg(`./uploads/${type}/${hospital.img}`);
+      }
 
       hospital.img = name;
       await hospital.save();
@@ -43,12 +49,14 @@ const updateImg = async (type, id, name) => {
 
     case "users":
       const user = await User.findById(id);
+      console.info("user ", user);
       if (!user) {
         console.warn("No es un usuario por id");
         return false;
       }
-
-      deleteImg(`./uploads/${type}/${user.img}`);
+      if (user.img) {
+        deleteImg(`./uploads/${type}/${user.img}`);
+      }
 
       user.img = name;
       await user.save();
