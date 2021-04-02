@@ -212,4 +212,17 @@ $RECYCLE.BIN/
 
 # End of https://www.toptal.com/developers/gitignore/api/node,linux,archlinuxpackages,macos,windows
 
-uploads/*
+uploads/doctors/**.jpg
+uploads/doctors/**.png
+uploads/doctors/**.jpeg
+uploads/doctors/**.gif
+
+uploads/hospitals/**.jpg
+uploads/hospitals/**.png
+uploads/hospitals/**.jpeg
+uploads/hospitals/**.gif
+
+uploads/users/**.jpg
+uploads/users/**.png
+uploads/users/**.jpeg
+uploads/users/**.gif
