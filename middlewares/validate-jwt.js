@@ -28,7 +28,6 @@ const validateAdminRole = async (req, res, next) => {
 
   try {
     const userDB = await User.findById(uid);
-    console.info("userDB ", userDB);
     if (!userDB) {
       return res.status(404).json({
         ok: false,
@@ -57,7 +56,6 @@ const validateAdminRoleOrOwnUser = async (req, res, next) => {
 
   try {
     const userDB = await User.findById(uid);
-    console.info("userDB ", userDB);
     if (!userDB) {
       return res.status(404).json({
         ok: false,
