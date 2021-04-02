@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const User = require("../models/user");
 
 const validateJWT = (req, res, next) => {
   // Read token
@@ -22,6 +23,66 @@ const validateJWT = (req, res, next) => {
   }
 };
 
+const validateAdminRole = async (req, res, next) => {
+  const { uid } = req;
+
+  try {
+    const userDB = await User.findById(uid);
+    console.info("userDB ", userDB);
+    if (!userDB) {
+      return res.status(404).json({
+        ok: false,
+        msg: "Usuario no existe",
+      });
+    }
+
+    if (!userDB.role.includes("ADMIN_ROLE")) {
+      return res.status(403).json({
+        ok: false,
+        msg: "No cuenta con privilegios de administrador",
+      });
+    }
+    next();
+  } catch (error) {
+    return res.status(500).json({
+      ok: false,
+      msg: "Hable con el administrador",
+    });
+  }
+};
+
+const validateAdminRoleOrOwnUser = async (req, res, next) => {
+  const { uid } = req;
+  const { id } = req.params;
+
+  try {
+    const userDB = await User.findById(uid);
+    console.info("userDB ", userDB);
+    if (!userDB) {
+      return res.status(404).json({
+        ok: false,
+        msg: "Usuario no existe",
+      });
+    }
+
+    if (userDB.role.includes("ADMIN_ROLE") || uid === id) {
+      next();
+    } else {
+      return res.status(403).json({
+        ok: false,
+        msg: "No cuenta con privilegios de administrador",
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      ok: false,
+      msg: "Hable con el administrador",
+    });
+  }
+};
+
 module.exports = {
   validateJWT,
+  validateAdminRole,
+  validateAdminRoleOrOwnUser,
 };
