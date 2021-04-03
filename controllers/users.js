@@ -6,21 +6,30 @@ const { generateJWT } = require("../helpers/jwt");
 
 const getUsers = async (req, res) => {
   let { since = 0, size = 1000 } = req.query;
-  since = Number(since);
-  size = Number(size);
-  console.log("size ", since, size);
+  try {
+    since = Number(since);
+    size = Number(size);
+    console.log("getUsers:since >> ", since, size);
 
-  const [users, total] = await Promise.all([
-    User.find({}, "name email role google img").skip(since).limit(size),
-    User.countDocuments(),
-  ]);
+    const [users, total] = await Promise.all([
+      User.find({}, "name email role google img").skip(since).limit(size),
+      User.countDocuments(),
+    ]);
+    console.log("getUsers:since >> ", users, total);
 
-  res.json({
-    ok: true,
-    users,
-    uid: req.uid,
-    total,
-  });
+    res.json({
+      ok: true,
+      users,
+      uid: req.uid,
+      total,
+    });
+  } catch (error) {
+    console.warn(error);
+    res.status(500).json({
+      ok: false,
+      msg: "Error inesperado... revisar logs",
+    });
+  }
 };
 
 const createUser = async (req, res = response) => {
